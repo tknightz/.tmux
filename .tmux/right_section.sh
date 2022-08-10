@@ -97,8 +97,6 @@ function _playing(){
 	hsong=${song:0:20}
 	tsong=${song:len-5:len}
 
-	# song=$(printf "%.15s" "$song")
-
 	local main=$(do_style " ﱘ  $hsong..." $WHITE $DARK)
 	local sep=$(do_style '' $DARK $BG)
 
@@ -128,9 +126,6 @@ _tmux_cpu_bg=$BLUE
 function _cpu(){
 	local usage=$(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else printf "%d", ($2+$4-u1) * 100 / (t-t1); }' <(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat))
 
-	# local fg=$WHITE
-	# local bg=$BLUE
-
 	if [[ $(echo "$usage > 60" | bc) -eq 1 ]];
 	then
 		_tmux_cpu_bg=$RED
@@ -147,7 +142,6 @@ function _cpu(){
 
 function _ram(){
 	local usage=$(free -m | awk 'NR==2 {print substr( $3 / 1000, 1, 3 )}')
-	# local total=$(free -m | awk 'NR==2 {print substr( $2 / 1000, 1, 3 )}')
 	local sep=$(do_style '' $ACCENT $_tmux_cpu_bg)
 
 	local content=$(printf " %sGb" $usage)
@@ -180,7 +174,6 @@ function _datetime(){
 }
 
 function _user(){
-	# local username=$(whoami)
 	local username=$(whoami)
 	local fg=$WHITE
 	local bg=$RED
@@ -190,7 +183,7 @@ function _user(){
 	local main=$(do_style "   $username " $fg $bg)
 	local sep=$(do_style '' $bg $ORANGE)
 
-	printf "%s" "$sep"
+	printf "%s" "$sep$main"
 }
 
 
