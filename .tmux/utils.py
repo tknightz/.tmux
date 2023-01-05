@@ -72,10 +72,10 @@ def session():
 def cpu():
     usage = float(getoutput( "awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else printf \"%d\", ($2+$4-u1) * 100 / (t-t1); }' <(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat)"))
 
-    if usage > 40:
-        config["cpu"]["fg"] = config["cpu"]["fg_medium"]
-    elif usage > 80:
+    if usage > 80:
         config["cpu"]["fg"] = config["cpu"]["fg_high"]
+    elif usage > 40:
+        config["cpu"]["fg"] = config["cpu"]["fg_medium"]
     else:
         config["cpu"]["fg"] = "blue"
 
@@ -84,23 +84,28 @@ def cpu():
 
 def playing_info():
     raw_metadata = getoutput(
-        'playerctl metadata -f \'{"{{lc(status)}}": "{{(title)}}"}\''
+        'playerctl metadata -a -f \'{{lc(status)}}: {{(title)}} - {{artist}}\''
     )
-    metadata = json.loads(raw_metadata)
-    playing_title = metadata.get("playing", None)
 
-    if playing_title is None:
+    if raw_metadata == "No players found":
         return ""
 
-    return playing_title[:20] + " ... "
+    lines = raw_metadata.split("\n")
+    for line in lines:
+        if line.startswith('playing'):
+            song_title = line.replace('playing: ', '')
+            if len(song_title) > 30:
+                song_title = song_title[:30] + "...."
+            return song_title
 
+    return ""
 
 def ram():
     usage = float(getoutput("free -m | awk 'NR==2 {print substr( $3 / 1000, 1, 3 )}'"))
-    if usage > 4:
-        config["ram"]["fg"] = config["ram"]["fg_medium"]
-    elif usage > 6:
+    if usage > 6:
         config["ram"]["fg"] = config["ram"]["fg_high"]
+    elif usage > 4:
+        config["ram"]["fg"] = config["ram"]["fg_medium"]
     else:
         config["ram"]["fg"] = "green"
 
