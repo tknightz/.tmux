@@ -15,7 +15,7 @@ colors = {
 }
 
 separators = {
-    "left": "",
-    "right": "",
-    "right_in": "",
+    "left": "",
+    "right": "",
+    "right_in": "",
 }

@@ -61,7 +61,7 @@ def make_styles(sections, sep="", right=False):
 
 def uptime():
     return getoutput(
-        "uptime | sed -E 's/^[^,]*up *//; s/, *[[:digit:]]* users.*//; s/min/minutes/; s/([[:digit:]]+):0?([[:digit:]]+)/\\1h \\2min/'"
+        "uptime | sed -E 's/^[^,]*up *//; s/, *[[:digit:]]* users.*//; s/([[:digit:]]+):0?([[:digit:]]+)/\\1h \\2min/'"
     )
 
 
@@ -123,8 +123,8 @@ def user():
 
 
 def window_active():
-    return "#W"
+    return "#W "
 
 
 def window():
-    return "#W"
+    return "#W "
