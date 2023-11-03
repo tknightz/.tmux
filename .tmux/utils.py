@@ -61,7 +61,7 @@ def make_styles(sections, sep="", right=False):
 
 def uptime():
     return getoutput(
-        "uptime | sed -E 's/^[^,]*up *//; s/, *[[:digit:]]* users.*//; s/([[:digit:]]+):0?([[:digit:]]+)/\\1h \\2min/'"
+        "uptime | sed -E 's/^[^,]*up *//; s/,.*//; s/([[:digit:]]+):0?([[:digit:]]+).*$/\\1h \\2min/'"
     )
 
 
@@ -84,7 +84,7 @@ def cpu():
 
 def playing_info():
     raw_metadata = getoutput(
-        'playerctl metadata -a -f \'{{lc(status)}}: {{(title)}} - {{artist}}\''
+        'playerctl metadata -a -f \'{{lc(status)}}: {{title}} - {{artist}}\''
     )
 
     if raw_metadata == "No players found":
@@ -95,16 +95,16 @@ def playing_info():
         if line.startswith('playing'):
             song_title = line.replace('playing: ', '')
             if len(song_title) > 30:
-                song_title = song_title[:30] + "...."
+                song_title = song_title[:30] + '…'
             return song_title
 
     return ""
 
 def ram():
     usage = float(getoutput("free -m | awk 'NR==2 {print substr( $3 / 1000, 1, 3 )}'"))
-    if usage > 6:
+    if usage > 16:
         config["ram"]["fg"] = config["ram"]["fg_high"]
-    elif usage > 4:
+    elif usage > 12:
         config["ram"]["fg"] = config["ram"]["fg_medium"]
     else:
         config["ram"]["fg"] = "green"
