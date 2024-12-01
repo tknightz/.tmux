@@ -1,5 +1,5 @@
 colors = {
-    "bg": "#1a1c23",
+    "bg": "#1a212e",
     "accent": "#87afff",
     "black": "#080808",
     "red": "#f43e5c",
